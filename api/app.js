@@ -1,11 +1,12 @@
 // Load ENV vars
+const path = require("path");
 const dotEnvOption = {
 	silent: true,
-	path: "env/dev.env",
+	// path: path.join(__dirname, "env/dev.env"),
 };
 
 if (process.env.NODE_ENV === "production") {
-	dotEnvOption.path = "env/prod.env";
+	// dotEnvOption.path = path.join(__dirname, "env/prod.env");
 }
 
 require("dotenv").config(dotEnvOption);

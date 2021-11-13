@@ -17,5 +17,6 @@ app.set("port", appPort);
 // Create Web server
 http.createServer(app).listen(appPort, () => {
 	console.log(`Node app running at localhost:${appPort}`);
+	console.log(__dirname);
 	cron.enable();
 });

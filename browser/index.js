@@ -12,7 +12,9 @@ const browserInstance = browserObject.startBrowser();
 const matcher = async (type, result) => {
 	try {
 		const stored = await readAnnouncements(type);
+
 		const [obtained] = result;
+		console.log("matcher stored", stored, "obtained");
 		if (stored !== obtained) {
 			console.log("send notification");
 			writeToLists(type, result);
@@ -37,7 +39,7 @@ const enableParser = () => {
 		parseConfigs.forEach(({ url, config, title }, index) => {
 			setTimeout(() => {
 				getUrls(url, config, title);
-			}, (index + 1) * 30000);
+			}, (index + 1) * 60000);
 		});
 	} catch (error) {
 		console.log("enableParser", error);

@@ -4,7 +4,7 @@ const browser = require("../browser");
 const enable = () => {
 	console.log("cron enabled");
 	cron.schedule("*/5 * * * *", () => {
-		console.log("running a task every 2 minute");
+		console.log("running a task every 5 minute");
 		browser.enableParser();
 	});
 };
