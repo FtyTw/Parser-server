@@ -7,13 +7,13 @@ const parseConfigs = [
 			subSelector: ".offer-wrapper",
 		},
 	},
-	// {
-	// 	title: "besplatka",
-	// 	url: "https://besplatka.ua/odessa/nedvizhimost/prodazha-kvartir/suvorovskii-r-n",
-	// 	config: {
-	// 		mainSelector: ".messages-list",
-	// 		subSelector: ".d-title",
-	// 	},
-	// },
+	 {
+	 	title: "besplatka",
+	 	url: "https://besplatka.ua/odessa/nedvizhimost/prodazha-kvartir/suvorovskii-r-n",
+	 	config: {
+	 		mainSelector: ".messages-list",
+	 		subSelector: ".d-title",
+	 	},
+	 },
 ];
 module.exports = parseConfigs;
