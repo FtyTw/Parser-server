@@ -18,6 +18,33 @@ const createDefaultFile = (path, callback) => {
 	});
 };
 
+const getLists = () => {
+	const announcementsPath = path.resolve(__dirname, `./announcements.json`);
+	const listsPath = path.resolve(__dirname, `./lists.json`);
+	const paths = [announcementsPath, listsPath];
+	const promises = paths.map((direction) => {
+		return new Promise((resolve, reject) => {
+			fs.readFile(direction, "utf8", (error, file) => {
+				if (error) {
+					createDefaultFile(direction, (defaultFile) => {
+						resolve(defaultFile);
+					});
+					return;
+				} else {
+					const result = JSON.parse(file);
+					if (result) {
+						resolve(result);
+					} else {
+						reject("no such a field");
+					}
+				}
+			});
+		});
+	});
+
+	return promises;
+};
+
 const readFromFile = (type, field) => {
 	const localPath = path.resolve(__dirname, `./${type}.json`);
 	const promise = new Promise((resolve, reject) => {
@@ -44,6 +71,7 @@ const readFromFile = (type, field) => {
 
 	return promise;
 };
+
 const readAnnouncements = (field) => readFromFile("announcements", field);
 
 const writeToFile = (type, field, data) => {
@@ -74,4 +102,5 @@ module.exports = {
 	writeToAnnouncements,
 	readFromFile,
 	readAnnouncements,
+	getLists,
 };
