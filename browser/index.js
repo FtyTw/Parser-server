@@ -12,11 +12,12 @@ const browserInstance = browserObject.startBrowser();
 const matcher = async (type, result) => {
 	try {
 		const stored = await readAnnouncements(type);
-		const [{ uri: obtained = null }] = result;
-		if (stored !== obtained) {
+		const [{ uri = null, title }] = result;
+		if (stored !== uri) {
 			console.log("send notification");
+			sendNotification({ uri, title });
 			writeToLists(type, result);
-			writeToAnnouncements(type, obtained);
+			writeToAnnouncements(type, uri);
 		}
 	} catch (error) {
 		console.log("matcher", error);

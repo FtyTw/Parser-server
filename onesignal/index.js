@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const sendNotification = async (url) => {
+const sendNotification = async ({ uri, title }) => {
   console.log("sendNotification");
   try {
     const result = await axios({
@@ -8,10 +8,11 @@ const sendNotification = async (url) => {
       url: "https://onesignal.com/api/v1/notifications",
       data: {
         app_id: "53dc8ca7-fd32-49c2-8a23-69d68075f36f",
-        contents: { en: "English Message" },
+        contents: { en: title },
         included_segments: ["Subscribed Users"],
         data: {
-          url,
+          uri,
+          title,
         },
       },
       headers: {
@@ -19,7 +20,6 @@ const sendNotification = async (url) => {
         Authorization: "Basic ZGEyN2NmZjItODEzYy00MTRlLTgzNjYtN2NmMDRkMjZhMzJi",
       },
     });
-    console.log(result);
   } catch (error) {
     console.log("sendNotification", error);
   }
