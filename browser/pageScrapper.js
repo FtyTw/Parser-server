@@ -10,10 +10,9 @@ function ScraperObject(url, config) {
 			await page.waitForSelector(this.config.mainSelector);
 			const selector = "a";
 			let urls = await page.$$eval(this.config.subSelector, (links) => {
-				console.log("page.$$eval", this.config);
 				links = links.map((el) => {
 					const { href, innerText } = el.querySelector("a");
-					return "" + href;
+					return { uri: "" + href, title: innerText };
 				});
 				return links;
 			});

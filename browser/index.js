@@ -12,9 +12,7 @@ const browserInstance = browserObject.startBrowser();
 const matcher = async (type, result) => {
 	try {
 		const stored = await readAnnouncements(type);
-
-		const [obtained] = result;
-		console.log("matcher stored", stored, "obtained");
+		const [{ uri: obtained = null }] = result;
 		if (stored !== obtained) {
 			console.log("send notification");
 			writeToLists(type, result);
@@ -28,6 +26,7 @@ const matcher = async (type, result) => {
 const getUrls = async (url, config, title) => {
 	try {
 		const result = await scraperController(browserInstance, url, config);
+
 		matcher(title, result);
 	} catch (error) {
 		console.log("getUrls", error);
