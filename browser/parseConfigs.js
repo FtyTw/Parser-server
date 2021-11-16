@@ -12,7 +12,7 @@ const parseConfigs = [
 		url: "https://besplatka.ua/odessa/nedvizhimost/prodazha-kvartir/suvorovskii-r-n",
 		config: {
 			mainSelector: ".messages-list",
-			subSelector: ".d-title",
+			subSelector: ".msg-inner:not(.top) .d-title",
 		},
 	},
 ];
