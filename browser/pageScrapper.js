@@ -16,7 +16,8 @@ function ScraperObject(url, config) {
 				});
 				return links;
 			});
-			// await browser.close()
+			await browser.close();
+
 			return urls;
 		},
 	};

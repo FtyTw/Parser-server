@@ -7,7 +7,6 @@ const {
 	readAnnouncements,
 } = require("../db");
 const parseConfigs = require("./parseConfigs");
-const browserInstance = browserObject.startBrowser();
 
 const matcher = async (type, result) => {
 	try {
@@ -24,7 +23,7 @@ const matcher = async (type, result) => {
 	}
 };
 
-const getUrls = async (url, config, title) => {
+const getUrls = async (url, config, title, browserInstance) => {
 	try {
 		const result = await scraperController(browserInstance, url, config);
 
@@ -34,13 +33,15 @@ const getUrls = async (url, config, title) => {
 	}
 };
 
+let parserCounter = 0;
 const enableParser = () => {
 	try {
-		parseConfigs.forEach(({ url, config, title }, index) => {
-			setTimeout(() => {
-				getUrls(url, config, title);
-			}, (index + 1) * 60000);
-		});
+		parserCounter =
+			parserCounter >= parseConfigs.length ? 0 : parserCounter;
+		const browserInstance = browserObject.startBrowser();
+		const { url, config, title } = parseConfigs[parserCounter];
+		parserCounter += 1;
+		getUrls(url, config, title, browserInstance);
 	} catch (error) {
 		console.log("enableParser", error);
 	}
