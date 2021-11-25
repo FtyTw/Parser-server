@@ -1,4 +1,10 @@
 const parseConfigs = [
+	{ title: "domria", url: "houses", config: "odessa" },
+	{ title: "domria", url: "flats", config: "odessa" },
+	{ title: "domria", url: "appartaments", config: "odessa" },
+	{ title: "domria", url: "houses", config: "kominternovo" },
+	{ title: "domria", url: "flats", config: "kominternovo" },
+	{ title: "domria", url: "appartaments", config: "kominternovo" },
 	{
 		title: "olx",
 		url: "https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/odessa/?search%5Bpaidads_listing%5D=1",

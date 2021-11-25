@@ -1,12 +1,17 @@
 const browserObject = require("./browser");
 const scraperController = require("./pageController");
 const sendNotification = require("../onesignal");
+const domRiaHandlers = require("../domria");
+
 const {
 	writeToLists,
 	writeToAnnouncements,
 	readAnnouncements,
 } = require("../db");
+
 const parseConfigs = require("./parseConfigs");
+
+const hugeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
 const matcher = async (type, result) => {
 	try {
@@ -23,9 +28,19 @@ const matcher = async (type, result) => {
 	}
 };
 
-const getUrls = async (url, config, title, browserInstance) => {
+const parseUrls = async (url, config, title, browserInstance) => {
 	try {
 		const result = await scraperController(browserInstance, url, config);
+
+		matcher(title, result);
+	} catch (error) {
+		console.log("parseUrls", error);
+	}
+};
+
+const getUrls = async (func, title) => {
+	try {
+		const result = await func();
 
 		matcher(title, result);
 	} catch (error) {
@@ -41,7 +56,13 @@ const enableParser = () => {
 		const browserInstance = browserObject.startBrowser();
 		const { url, config, title } = parseConfigs[parserCounter];
 		parserCounter += 1;
-		getUrls(url, config, title, browserInstance);
+		if (title !== "domria") {
+			parseUrls(url, config, title, browserInstance);
+		} else {
+			const type = hugeFirstLetter(url);
+			const place = hugeFirstLetter(config);
+			getUrls(domRiaHandlers[`get${place}${type}`], title);
+		}
 	} catch (error) {
 		console.log("enableParser", error);
 	}

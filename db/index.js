@@ -9,7 +9,7 @@ const writeToAnnouncements = (field, data) => {
 	writeToFile("announcements", field, data);
 };
 const createDefaultFile = (path, callback) => {
-	const defaultFile = { olx: null, besplatka: null };
+	const defaultFile = { olx: null, besplatka: null, domria: null };
 	fs.writeFile(path, JSON.stringify(defaultFile), "utf8", () => {
 		console.log("stored");
 		if (callback) {
