@@ -2,9 +2,10 @@ const cron = require("node-cron");
 const browser = require("../browser");
 
 const enable = () => {
+	const interval = 5;
 	console.log("cron enabled");
-	cron.schedule("*/30 * * * *", () => {
-		console.log("running a task every 30 minute");
+	cron.schedule(`*/${interval} * * * *`, () => {
+		console.log(`running a task every ${interval} minute`);
 		browser.enableParser();
 	});
 };

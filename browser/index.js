@@ -16,12 +16,12 @@ const hugeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 const matcher = async (type, result) => {
 	try {
 		const stored = await readAnnouncements(type);
-		const [{ uri = null, title }] = result;
+		const [{ uri = null, title } = {}] = result;
 		if (stored !== uri) {
 			console.log("send notification");
+			await writeToAnnouncements(type, uri);
+			await writeToLists(type, result);
 			sendNotification({ uri, title });
-			writeToLists(type, result);
-			writeToAnnouncements(type, uri);
 		}
 	} catch (error) {
 		console.log("matcher", error);
@@ -31,8 +31,9 @@ const matcher = async (type, result) => {
 const parseUrls = async (url, config, title, browserInstance) => {
 	try {
 		const result = await scraperController(browserInstance, url, config);
-
-		matcher(title, result);
+		if (result?.length) {
+			matcher(title, result);
+		}
 	} catch (error) {
 		console.log("parseUrls", error);
 	}
@@ -42,7 +43,9 @@ const getUrls = async (func, title) => {
 	try {
 		const result = await func();
 
-		matcher(title, result);
+		if (result?.length) {
+			matcher(title, result);
+		}
 	} catch (error) {
 		console.log("getUrls", error);
 	}
@@ -53,10 +56,10 @@ const enableParser = () => {
 	try {
 		parserCounter =
 			parserCounter >= parseConfigs.length ? 0 : parserCounter;
-		const browserInstance = browserObject.startBrowser();
 		const { url, config, title } = parseConfigs[parserCounter];
 		parserCounter += 1;
-		if (title !== "domria") {
+		if (!title.includes("domria")) {
+			const browserInstance = browserObject.startBrowser();
 			parseUrls(url, config, title, browserInstance);
 		} else {
 			const type = hugeFirstLetter(url);
