@@ -87,17 +87,19 @@ const handleParamsRequest = async (type, place) => {
 		const {
 			data: { items },
 		} = result;
-		const ids = items.slice(0, 2);
+
+		if (!items.length) return;
+		const ids = items.slice(0, 20);
 		const promises = ids.map(getAnnDataById);
 		const result_data = await Promise.all(promises);
 		const prettified_data = result_data.map(
-			({
-				data: { description, description_uk, beautiful_url, ...rest },
-			}) => ({
-				title: description || description_uk,
-				uri: `${path_domria}${beautiful_url}`,
-				// rest,
-			})
+			({ data: { description, description_uk, beautiful_url } }) => {
+				const desc = description || description_uk;
+				return {
+					title: desc.slice(0, 80),
+					uri: `${path_domria}${beautiful_url}`,
+				};
+			}
 		);
 
 		return prettified_data;
