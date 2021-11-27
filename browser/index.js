@@ -18,7 +18,6 @@ const matcher = async (type, result) => {
 		const stored = await readAnnouncements(type);
 		const [{ uri = null, title } = {}] = result;
 		if (stored !== uri) {
-			console.log("send notification");
 			await writeToAnnouncements(type, uri);
 			await writeToLists(type, result);
 			sendNotification({ uri, title });

@@ -11,12 +11,12 @@ const fs = require("fs");
  * --------------- */
 
 // Define app port
-const appPort = process.env.PORT || 8080;
+const appPort = process.env.PORT || 8082;
 app.set("port", appPort);
 
 // Create Web server
 http.createServer(app).listen(appPort, () => {
-	console.log(`Node app running at localhost:${appPort}`);
-	console.log(__dirname);
+	const when = new Date().toISOString();
+	console.log(`Node app running at localhost:${appPort} at the ${when}`);
 	cron.enable();
 });

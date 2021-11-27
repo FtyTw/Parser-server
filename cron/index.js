@@ -3,9 +3,10 @@ const browser = require("../browser");
 
 const enable = () => {
 	const interval = 5;
-	console.log("cron enabled");
+	const when = () => new Date().toISOString();
+	console.log(`cron enabled at ${when()}`);
 	cron.schedule(`*/${interval} * * * *`, () => {
-		console.log(`running a task every ${interval} minute`);
+		console.log(`running a task every ${interval} minute ${when()}`);
 		browser.enableParser();
 	});
 };

@@ -1,7 +1,11 @@
 const axios = require("axios");
 
 const sendNotification = async ({ uri, title }) => {
-  console.log("sendNotification");
+  const when = new Date().toISOString();
+  console.log(`
+      Notification was sent at ${when}
+      Uri is ${uri}
+    `);
   try {
     const result = await axios({
       method: "post",
