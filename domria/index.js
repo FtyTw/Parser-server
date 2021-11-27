@@ -75,9 +75,31 @@ const search = {
 
 const getItems = async (params) => await instance({ params });
 
-const getAnnDataById = (id) =>
+const getAnnDataByIdPromises = (id) =>
 	axios(`https://developers.ria.com/dom/info/${id}?api_key=${YOUR_API_KEY}`);
 
+const getAnnDataById = async (items) => {
+	try {
+		const ids = items.slice(0, 15);
+
+		const promises = ids.map(getAnnDataByIdPromises);
+		const result_data = await Promise.all(promises);
+
+		const prettified_data = result_data.map(
+			({ data: { description, description_uk, beautiful_url } }) => {
+				const desc = description || description_uk;
+				return {
+					title: desc.slice(0, 80),
+					uri: `${path_domria}${beautiful_url}`,
+				};
+			}
+		);
+
+		return prettified_data;
+	} catch (error) {
+		console.log("getAnnDataById", error);
+	}
+};
 const handleParamsRequest = async (type, place) => {
 	try {
 		const result = await getItems({
@@ -87,20 +109,8 @@ const handleParamsRequest = async (type, place) => {
 		const {
 			data: { items },
 		} = result;
-		const ids = items.slice(0, 2);
-		const promises = ids.map(getAnnDataById);
-		const result_data = await Promise.all(promises);
-		const prettified_data = result_data.map(
-			({
-				data: { description, description_uk, beautiful_url, ...rest },
-			}) => ({
-				title: description || description_uk,
-				uri: `${path_domria}${beautiful_url}`,
-				// rest,
-			})
-		);
 
-		return prettified_data;
+		return !items.length ? items : getAnnDataById(items);
 	} catch (error) {
 		console.log("handleParamsRequest", error.message);
 	}
