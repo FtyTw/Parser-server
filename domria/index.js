@@ -87,7 +87,7 @@ const getAnnDataById = async (items) => {
 
 		const prettified_data = result_data.map(
 			({ data: { description, description_uk, beautiful_url } }) => {
-				const desc = description || description_uk;
+				const desc = description || description_uk || "empty title";
 				return {
 					title: desc.slice(0, 80),
 					uri: `${path_domria}${beautiful_url}`,
