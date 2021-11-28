@@ -11,7 +11,7 @@ const fs = require("fs");
  * --------------- */
 
 // Define app port
-const appPort = process.env.PORT || 8082;
+const appPort = process.env.PORT || 8080;
 app.set("port", appPort);
 
 // Create Web server
