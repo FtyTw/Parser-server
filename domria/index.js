@@ -86,8 +86,20 @@ const getAnnDataById = async (items) => {
 		const result_data = await Promise.all(promises);
 
 		const prettified_data = result_data.map(
-			({ data: { description, description_uk, beautiful_url } }) => {
-				const desc = description || description_uk || "empty title";
+			({
+				data: {
+					description,
+					description_uk,
+					beautiful_url,
+					street_name,
+				},
+			}) => {
+				const desc =
+					description ||
+					description_uk ||
+					street_name ||
+					"Нет описания";
+
 				return {
 					title: desc.slice(0, 80),
 					uri: `${path_domria}${beautiful_url}`,
