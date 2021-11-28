@@ -1,10 +1,36 @@
 const parseConfigs = [
-	{ title: "domria0", url: "houses", config: "odessa" },
-	{ title: "domria1", url: "flats", config: "odessa" },
-	{ title: "domria2", url: "appartaments", config: "odessa" },
-	{ title: "domria3", url: "houses", config: "kominternovo" },
-	{ title: "domria4", url: "appartaments", config: "kominternovo" },
-	// { title: "domria5", url: "flats", config: "kominternovo" },
+	{
+		//
+		title: "domria_odessa_houses",
+		url: "houses",
+		config: "odessa",
+	},
+	{
+		//
+		title: "domria_odessa_flats",
+		url: "flats",
+		config: "odessa",
+	},
+	{
+		title: "domria_odessa_appartaments",
+		url: "appartaments",
+		config: "odessa",
+	},
+	{
+		title: "domria_kominternovo_houses",
+		url: "houses",
+		config: "kominternovo",
+	},
+	{
+		title: "domria_kominternovo_appartaments",
+		url: "appartaments",
+		config: "kominternovo",
+	},
+	{
+		title: "domria_kominternovo_flats",
+		url: "flats",
+		config: "kominternovo",
+	},
 
 	{
 		title: "olx",
