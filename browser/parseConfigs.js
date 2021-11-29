@@ -33,16 +33,48 @@ const parseConfigs = [
 	},
 
 	{
-		title: "olx",
-		url: "https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/odessa/?search%5Bpaidads_listing%5D=1",
+		title: "olx_odessa_appartaments",
+		url: "https://www.olx.ua/nedvizhimost/kvartiry/prodazha-kvartir/odessa/?search%5Bprivate_business%5D=private&search%5Bdistrict_id%5D=91&currency=USD",
 		config: {
 			mainSelector: ".content",
 			subSelector: ".title-cell",
 		},
 	},
 	{
-		title: "besplatka",
-		url: "https://besplatka.ua/odessa/nedvizhimost/prodazha-kvartir/suvorovskii-r-n",
+		title: "olx_odessa_houses",
+		url: "https://www.olx.ua/nedvizhimost/doma/prodazha-domov/odessa/?search%5Bprivate_business%5D=private&search%5Bdistrict_id%5D=91&currency=USD",
+		config: {
+			mainSelector: ".content",
+			subSelector: ".title-cell",
+		},
+	},
+	{
+		title: "olx_odessa_flats",
+		url: "https://www.olx.ua/nedvizhimost/komnaty/prodazha-komnat/odessa/?search%5Bprivate_business%5D=private&search%5Bdistrict_id%5D=91&currency=USD",
+		config: {
+			mainSelector: ".content",
+			subSelector: ".title-cell",
+		},
+	},
+	{
+		title: "besplatka_odessa_appartaments",
+		url: "https://besplatka.ua/ru/odessa/nedvizhimost/prodazha-kvartir/suvorovskii-r-n/ot-sobstvennika",
+		config: {
+			mainSelector: ".messages-list",
+			subSelector: ".msg-inner:not(.top) .d-title",
+		},
+	},
+	{
+		title: "besplatka_odessa_houses",
+		url: "https://besplatka.ua/ru/odessa/nedvizhimost/prodazha-domov/suvorovskii-r-n/ot-sobstvennika",
+		config: {
+			mainSelector: ".messages-list",
+			subSelector: ".msg-inner:not(.top) .d-title",
+		},
+	},
+	{
+		title: "besplatka_odessa_flats",
+		url: "https://besplatka.ua/ru/odessa/nedvizhimost/prodazha-komnat/suvorovskii-r-n/ot-sobstvennika",
 		config: {
 			mainSelector: ".messages-list",
 			subSelector: ".msg-inner:not(.top) .d-title",
