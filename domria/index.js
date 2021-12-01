@@ -114,6 +114,7 @@ const getAnnDataById = async (items) => {
 };
 const handleParamsRequest = async (type, place) => {
 	try {
+		console.log(`Domria:Requesting the ${type} from the ${place}`);
 		const result = await getItems({
 			...search[type],
 			...search[place],
@@ -121,7 +122,7 @@ const handleParamsRequest = async (type, place) => {
 		const {
 			data: { items },
 		} = result;
-
+		console.log(`Domria:Got an items of ${type} from the ${place}`);
 		return !items.length ? items : getAnnDataById(items);
 	} catch (error) {
 		console.log("handleParamsRequest", error.message);
