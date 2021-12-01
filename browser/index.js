@@ -20,7 +20,8 @@ const matcher = async (type, result) => {
 		if (stored !== uri) {
 			await writeToAnnouncements(type, uri);
 			await writeToLists(type, result);
-			sendNotification({ uri, title });
+			const [simpleType] = type.split("_");
+			sendNotification({ uri, title: `${simpleType}:${title}` });
 		}
 	} catch (error) {
 		console.log("matcher", error);
