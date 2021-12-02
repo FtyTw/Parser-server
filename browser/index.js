@@ -7,21 +7,37 @@ const {
 	writeToLists,
 	writeToAnnouncements,
 	readAnnouncements,
+	readLists,
 } = require("../db");
 
 const parseConfigs = require("./parseConfigs");
 
 const hugeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
+const notificationCurry = (type) => {
+	return ({ uri = null, title }) => {
+		try {
+			const [simpleType] = type.split("_");
+			if (uri && title) {
+				sendNotification({ uri, title: `${simpleType}:${title}` });
+			}
+		} catch (error) {
+			console.log("notificationCurry", error);
+		}
+	};
+};
+
 const matcher = async (type, result) => {
 	try {
-		const stored = await readAnnouncements(type);
-		const [{ uri = null, title } = {}] = result;
-		if (stored !== uri) {
-			await writeToAnnouncements(type, uri);
+		const stored = await readLists(type);
+		const newAnn = result.filter(
+			({ uri }) => !stored.find(({ uri: oldUri }) => uri === oldUri)
+		);
+
+		if (newAnn?.length) {
 			await writeToLists(type, result);
-			const [simpleType] = type.split("_");
-			sendNotification({ uri, title: `${simpleType}:${title}` });
+			const handler = notificationCurry(type);
+			newAnn.forEach(handler);
 		}
 	} catch (error) {
 		console.log("matcher", error);

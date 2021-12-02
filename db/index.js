@@ -123,11 +123,13 @@ const readFromFile = (type, field) => {
 };
 
 const readAnnouncements = (field) => readFromFile("announcements", field);
+const readLists = (field) => readFromFile("lists", field);
 
 module.exports = {
 	writeToLists,
 	writeToAnnouncements,
 	readFromFile,
 	readAnnouncements,
+	readLists,
 	getLists,
 };
