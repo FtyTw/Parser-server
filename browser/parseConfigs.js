@@ -5,11 +5,11 @@ const Types = [
 ];
 const olx_config = {
 	mainSelector: ".content",
-	subSelector: ".offer:not(.promoted) .title-cell",
+	subSelector: ".title-cell",
 };
 const besplatka_config = {
 	mainSelector: ".messages-list",
-	subSelector: ".msg-inner:not(.top) .d-title",
+	subSelector: ".d-title",
 };
 const olx_places = [
 	//
@@ -66,7 +66,7 @@ const besplatkaConfigs = Types.map(({ type }) => {
 	const [, hardType] = type.split("/");
 	return {
 		title: "besplatka_odessa_appartaments",
-		url: `https://besplatka.ua/ru/odessa/nedvizhimost/${hardType}/suvorovskii-r-n/ot-sobstvennika`,
+		url: `https://besplatka.ua/ru/odessa/nedvizhimost/${hardType}/suvorovskii-r-n/ot-sobstvennika?currency=USD`,
 		config: besplatka_config,
 	};
 });

@@ -30,12 +30,15 @@ const notificationCurry = (type) => {
 const matcher = async (type, result) => {
 	try {
 		const stored = await readLists(type);
-		const newAnn = result.filter(
-			({ uri }) => !stored.find(({ uri: oldUri }) => uri === oldUri)
-		);
-
+		const newAnn =
+			stored && result
+				? result.filter(
+						({ uri }) =>
+							!stored.find(({ uri: oldUri }) => uri === oldUri)
+				  )
+				: [];
+		await writeToLists(type, result);
 		if (newAnn?.length) {
-			await writeToLists(type, result);
 			const handler = notificationCurry(type);
 			newAnn.forEach(handler);
 		}
@@ -47,8 +50,17 @@ const matcher = async (type, result) => {
 const parseUrls = async (url, config, title, browserInstance) => {
 	try {
 		const result = await scraperController(browserInstance, url, config);
+		const withoutDuplicates = [
+			...new Set(
+				result.map(({ uri, title }) => `${uri}splitter${title}`)
+			),
+		].map((str) => {
+			const [uri, title] = str.split("splitter");
+			return { uri, title };
+		});
+
 		if (result?.length) {
-			matcher(title, result);
+			matcher(title, withoutDuplicates);
 		}
 	} catch (error) {
 		console.log("parseUrls", error);
