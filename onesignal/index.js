@@ -17,7 +17,7 @@ const sendNotification = async ({ uri, title, category }) => {
         headings: { en: title },
         included_segments: ["Subscribed Users"],
         data: {
-          uriFinal,
+          uri: uriFinal,
           title,
         },
       },
