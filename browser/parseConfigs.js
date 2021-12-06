@@ -62,10 +62,10 @@ const domriaConfigs = domriaPlaces
 	)
 	.flat();
 
-const besplatkaConfigs = Types.map(({ type }) => {
+const besplatkaConfigs = Types.map(({ type, title }) => {
 	const [, hardType] = type.split("/");
 	return {
-		title: "besplatka_odessa_appartaments",
+		title: `besplatka_odessa_${title}`,
 		url: `https://besplatka.ua/ru/odessa/nedvizhimost/${hardType}/suvorovskii-r-n/ot-sobstvennika?currency=USD`,
 		config: besplatka_config,
 	};
@@ -77,4 +77,5 @@ const parseConfigs = [
 	...domriaConfigs,
 	...besplatkaConfigs,
 ];
+
 module.exports = parseConfigs;

@@ -33,20 +33,16 @@ const notificationCurry = (type) => {
 
 const matcher = async (type, result) => {
 	try {
-		const stored = await readLists(type);
-		const newAnn =
-			stored && result
-				? result.filter(
-						({ uri }) =>
-							!stored.find(({ uri: oldUri }) => uri === oldUri)
-				  )
-				: [];
-
-		if (!stored || newAnn?.length) {
-			await writeToLists(type, result);
-		}
+		const stored = (await readLists(type)) || [];
+		const newAnn = result
+			? result.filter(
+					({ uri }) =>
+						!stored.find(({ uri: oldUri }) => uri === oldUri)
+			  )
+			: [];
 
 		if (newAnn?.length) {
+			await writeToLists(type, result);
 			const handler = notificationCurry(type);
 			newAnn.forEach(handler);
 		}
