@@ -19,7 +19,11 @@ const notificationCurry = (type) => {
 		try {
 			const [simpleType] = type.split("_");
 			if (uri && title) {
-				sendNotification({ uri, title: `${simpleType}:${title}` });
+				sendNotification({
+					uri,
+					title: `${simpleType}:${title}`,
+					category: type,
+				});
 			}
 		} catch (error) {
 			console.log("notificationCurry", error);
@@ -37,7 +41,11 @@ const matcher = async (type, result) => {
 							!stored.find(({ uri: oldUri }) => uri === oldUri)
 				  )
 				: [];
-		await writeToLists(type, result);
+
+		if (!stored || newAnn?.length) {
+			await writeToLists(type, result);
+		}
+
 		if (newAnn?.length) {
 			const handler = notificationCurry(type);
 			newAnn.forEach(handler);
