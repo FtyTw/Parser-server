@@ -32,7 +32,7 @@ const olx_places = [
 
 const olxUrl = (place, type) =>
 	encodeURI(
-		`https://www.olx.ua/nedvizhimost/${type}/${place}/?search[private_business]=private${
+		`https://www.olx.ua/nedvizhimost/${type}/${place}/?search[private_business]=private&search[order]=created_at%3Adesc${
 			place.includes("odessa") ? "&search[district_id]=91" : ""
 		}&currency=USD`
 	);
