@@ -4,12 +4,14 @@ const Types = [
 	{ type: "komnaty/prodazha-komnat", title: "flats" },
 ];
 const olx_config = {
-	mainSelector: ".content",
+	mainSelector: ":not(.wrapper>.emptynew)+.wrapper>.content",
 	subSelector: ".title-cell",
+	emptySelector: ".emptynew",
 };
 const besplatka_config = {
 	mainSelector: ".messages-list",
 	subSelector: ".d-title",
+	emptySelector: ".no-data",
 };
 const olx_places = [
 	//
