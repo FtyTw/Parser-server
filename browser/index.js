@@ -35,16 +35,23 @@ const matcher = async (type, result) => {
 	try {
 		const stored = (await readLists(type)) || [];
 		const newAnn = result
-			? result.filter(
-					({ uri }) =>
-						!stored.find(({ uri: oldUri }) => uri === oldUri)
-			  )
+			? result.filter(({ uri }, index, array) => {
+					const find = !stored.find(
+						({ uri: oldUri }) => uri === oldUri
+					);
+					if (find) {
+						array[index].unseen = 1;
+					}
+					return find;
+			  })
 			: [];
 
 		if (newAnn?.length) {
 			await writeToLists(type, result);
 			const handler = notificationCurry(type);
 			newAnn.forEach(handler);
+		} else {
+			console.log("nothing new was found");
 		}
 	} catch (error) {
 		console.log("matcher", error);
