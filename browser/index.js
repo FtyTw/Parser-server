@@ -41,13 +41,19 @@ const matcher = async (type, result) => {
 					);
 					if (find) {
 						array[index].unseen = 1;
+						array[index].timestamp = new Date().toISOString();
 					}
 					return find;
 			  })
 			: [];
-
 		if (newAnn?.length) {
-			await writeToLists(type, result);
+			// const filteredStored = stored.filter(
+			// 	({ unseen, timestamp }) =>
+			// 		new Date().getUTCDate() - new Date(timestamp).getUTCDate() <
+			// 			3 || unseen !== 0
+			// );
+			const mustBeStored = [...newAnn, ...stored];
+			await writeToLists(type, mustBeStored);
 			const handler = notificationCurry(type);
 			newAnn.forEach(handler);
 		} else {

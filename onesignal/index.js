@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const sendNotification = async ({ uri, title, category }) => {
+const sendNotification = async ({ uri, title, category }, test = false) => {
   const when = new Date().toISOString();
   console.log(`
       Notification was sent at ${when}
@@ -15,7 +15,7 @@ const sendNotification = async ({ uri, title, category }) => {
         app_id: "53dc8ca7-fd32-49c2-8a23-69d68075f36f",
         contents: { en: uriFinal },
         headings: { en: title },
-        included_segments: ["Subscribed Users"],
+        included_segments: test ? ["Test"] : ["Subscribed Users"],
         data: {
           uri: uriFinal,
           title,
