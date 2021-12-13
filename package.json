@@ -17,6 +17,7 @@
     "aws-sdk": "^2.388.0",
     "axios": "^0.24.0",
     "body-parser": "^1.18.3",
+    "chalk": "^3.0.0-beta.2",
     "cheerio": "^1.0.0-rc.10",
     "compress": "^0.99.0",
     "compression": "^1.7.3",

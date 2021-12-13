@@ -14,6 +14,7 @@ module.exports = (app) => {
 
 	app.use(`${API_PATH}/ping`, require("./ping").routes);
 	app.use(`${API_PATH}/unseen`, require("./unseen").routes);
+	app.use(`${API_PATH}/error`, require("./errorLog").routes);
 
 	// Add default route
 	app.get("*", (req, res) => {
