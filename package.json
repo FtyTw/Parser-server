@@ -9,7 +9,9 @@
     "restart": "clear && node server.js",
     "send-lists": "scp db/lists.json kirov@35.233.157.22:/home/kirov/temp",
     "get-lists": "scp kirov@35.233.157.22:/home/realtyparserapp/Parser-server/db/lists.json /Users/paulkirov/Documents/Parser-server",
-    "copy-temp": "cp -i /home/kirov/temp/lists.json /home/realtyparserapp/Parser-server/db"
+    "copy-temp": "cp -i /home/kirov/temp/lists.json /home/realtyparserapp/Parser-server/db",
+    "dev": "NODE_ENV=development npm run prod",
+    "prod": "pm2 start server.js && pm2 logs server --lines 1000"
   },
   "author": "Paul Kirov",
   "license": "ISC",

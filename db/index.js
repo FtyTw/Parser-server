@@ -55,31 +55,24 @@ const writeToLists = (field, data) => writeToFile("lists", field, data);
 const writeToAnnouncements = (field, data) =>
 	writeToFile("announcements", field, data);
 
+const writeToErrors = (field, data) => writeToFile("error", field, data);
+
 const getLists = () => {
 	try {
-		const announcementsPath = path.resolve(
-			__dirname,
-			`./announcements.json`
-		);
 		const listsPath = path.resolve(__dirname, `./lists.json`);
-		const paths = [announcementsPath, listsPath];
-		const promises = paths.map((direction) => {
-			return new Promise((resolve, reject) => {
-				fs.readFile(direction, "utf8", (error, file) => {
-					if (error) {
-						createDefaultFile(direction, (defaultFile) => {
-							resolve(defaultFile);
-						});
-						return;
-					} else {
-						const result = JSON.parse(file);
-						resolve(result);
-					}
-				});
+		return new Promise((resolve, reject) => {
+			fs.readFile(listsPath, "utf8", (error, file) => {
+				if (error) {
+					createDefaultFile(listsPath, (defaultFile) => {
+						resolve(defaultFile);
+					});
+					return;
+				} else {
+					const result = JSON.parse(file);
+					resolve(result);
+				}
 			});
 		});
-
-		return promises;
 	} catch (error) {
 		console.log("getLists", error);
 	}
@@ -124,12 +117,15 @@ const readFromFile = (type, field) => {
 
 const readAnnouncements = (field) => readFromFile("announcements", field);
 const readLists = (field) => readFromFile("lists", field);
+const readErrors = (field) => readFromFile("error");
 
 module.exports = {
 	writeToLists,
 	writeToAnnouncements,
+	writeToErrors,
 	readFromFile,
 	readAnnouncements,
 	readLists,
+	readErrors,
 	getLists,
 };

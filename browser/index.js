@@ -1,7 +1,8 @@
 const browserObject = require("./browser");
 const scraperController = require("./pageController");
-const sendNotification = require("../onesignal");
+const { sendNotification, sendMultipleNotifications } = require("../onesignal");
 const domRiaHandlers = require("../domria");
+const { ErrorLog, InfoLog } = require("../logs");
 
 const {
 	writeToLists,
@@ -19,14 +20,17 @@ const notificationCurry = (type) => {
 		try {
 			const [simpleType] = type.split("_");
 			if (uri && title) {
-				sendNotification({
-					uri,
-					title: `${simpleType}:${title}`,
-					category: type,
-				});
+				sendNotification(
+					{
+						uri,
+						title: `${simpleType}:${title}`,
+						category: type,
+					},
+					true
+				);
 			}
 		} catch (error) {
-			console.log("notificationCurry", error);
+			ErrorLog("notificationCurry", error);
 		}
 	};
 };
@@ -54,13 +58,25 @@ const matcher = async (type, result) => {
 			// );
 			const mustBeStored = [...newAnn, ...stored];
 			await writeToLists(type, mustBeStored);
-			const handler = notificationCurry(type);
-			newAnn.forEach(handler);
+			if (newAnn.length > 1) {
+				sendMultipleNotifications(type, newAnn);
+			} else {
+				const [simpleType] = type.split("_");
+				const [{ uri, title }] = newAnn;
+				sendNotification(
+					{
+						uri,
+						title: `${simpleType}:${title}`,
+						category: type,
+					},
+					true
+				);
+			}
 		} else {
-			console.log("nothing new was found");
+			InfoLog("matcher", "nothing new was found");
 		}
 	} catch (error) {
-		console.log("matcher", error);
+		ErrorLog("matcher", error);
 	}
 };
 
@@ -80,7 +96,8 @@ const parseUrls = async (url, config, title, browserInstance) => {
 			matcher(title, withoutDuplicates);
 		}
 	} catch (error) {
-		console.log("parseUrls", error);
+		ErrorLog("parseUrls", error);
+		parserCounter = parserCounter > 0 ? parserCounter - 1 : 0;
 	}
 };
 
@@ -92,7 +109,7 @@ const getUrls = async (func, title) => {
 			matcher(title, result);
 		}
 	} catch (error) {
-		console.log("getUrls", error);
+		ErrorLog("getUrls", error);
 	}
 };
 
@@ -112,7 +129,7 @@ const enableParser = () => {
 			getUrls(domRiaHandlers[`get${place}${type}`], title);
 		}
 	} catch (error) {
-		console.log("enableParser", error);
+		ErrorLog("enableParser", error);
 	}
 };
 

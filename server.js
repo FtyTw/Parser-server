@@ -16,7 +16,7 @@ app.set("port", appPort);
 
 // Create Web server
 http.createServer(app).listen(appPort, () => {
-	const when = new Date().toISOString();
+	const when = new Date().toLocaleString("uk-UA");
 	console.log(`Node app running at localhost:${appPort} at the ${when}`);
 	cron.enable();
 });
