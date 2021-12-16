@@ -1,6 +1,39 @@
 const fs = require("fs");
 const path = require("path");
 
+const readAndCleanStorage = () => {
+	const localPath = path.resolve(__dirname, `./lists.json`);
+	const backupPath = path.resolve(__dirname, `./backup.json`);
+	const testPath = localPath.replace("/db", "");
+	console.log("localPath", localPath, "testPath", testPath);
+	fs.readFile(testPath, "utf8", (error, file) => {
+		if (error) {
+			console.log(error);
+			return;
+		} else {
+			const result = JSON.parse(file);
+			const filtered = {};
+			for (let key in result) {
+				if (result[key]?.length) {
+					const test = result[key].filter(
+						({ unseen, timestamp }) =>
+							new Date().getUTCDate() -
+								new Date(timestamp).getUTCDate() <
+								2 || unseen !== 0
+					);
+					filtered[key] = test;
+				}
+			}
+			fs.writeFile(backupPath, JSON.stringify(result), "utf8", () => {
+				console.log(`stored to ${backupPath}`);
+			});
+			fs.writeFile(localPath, JSON.stringify(filtered), "utf8", () => {
+				console.log(`stored to ${localPath}`);
+			});
+		}
+	});
+};
+
 const createDefaultFile = (path, callback, field, data = null) => {
 	try {
 		const defaultFile = {};
@@ -132,4 +165,5 @@ module.exports = {
 	readAnnouncements,
 	readLists,
 	getLists,
+	readAndCleanStorage,
 };

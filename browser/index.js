@@ -47,11 +47,6 @@ const matcher = async (type, result) => {
 			  })
 			: [];
 		if (newAnn?.length) {
-			// const filteredStored = stored.filter(
-			// 	({ unseen, timestamp }) =>
-			// 		new Date().getUTCDate() - new Date(timestamp).getUTCDate() <
-			// 			3 || unseen !== 0
-			// );
 			const mustBeStored = [...newAnn, ...stored];
 			await writeToLists(type, mustBeStored);
 			const handler = notificationCurry(type);
@@ -97,6 +92,7 @@ const getUrls = async (func, title) => {
 };
 
 let parserCounter = 0;
+const getCurrentParseCounter = () => parserCounter;
 const enableParser = () => {
 	try {
 		parserCounter =
@@ -118,4 +114,5 @@ const enableParser = () => {
 
 module.exports = {
 	enableParser,
+	getCurrentParseCounter,
 };
