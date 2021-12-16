@@ -34,16 +34,53 @@ const countUnseen = (lists) => {
 
 	return reduced;
 };
+
+const catsCount = (lists) => {
+	const reduced = Object.keys(lists).reduce(
+		(acc, key) => {
+			const [identifier] = key.split("_");
+			const unseen = lists[key].filter(({ unseen }) => !!unseen);
+
+			acc[`${identifier}Count`] =
+				acc[`${identifier}Count`] + unseen?.length;
+			acc[`${identifier}Categories`][unseen?.length ? "unshift" : "push"](
+				key
+			);
+			acc.categoriesCount = {
+				...acc.categoriesCount,
+				[key]: unseen?.length,
+			};
+			return acc;
+		},
+		{
+			olxCount: 0,
+			besplatkaCount: 0,
+			domriaCount: 0,
+			olxCategories: [],
+			besplatkaCategories: [],
+			domriaCategories: [],
+			categoriesCount: {},
+		}
+	);
+	return reduced;
+};
 const ping = async (req, res) => {
 	try {
-		const { category = false } = req.query;
-		const lists = category ? await readLists(category) : await getLists();
-		const result = category ? lists : countUnseen(lists);
-		res.apiResponse(
-			JSON.stringify({
-				result,
-			})
-		);
+		const { category = false, catOnly } = req.query;
+		const lists = await getLists();
+		if (catOnly) {
+			const categories = catsCount(lists);
+			res.apiResponse(JSON.stringify(categories));
+			return;
+		}
+		if (category) {
+			const categoryArr = await readLists(category);
+			categoryArr.sort(({ unseen: a }, { unseen: b }) => b - a);
+			res.apiResponse(JSON.stringify(categoryArr));
+			return;
+		}
+
+		res.apiResponse(JSON.stringify(lists));
 	} catch (error) {
 		console.log("ping", error);
 	}
