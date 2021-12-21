@@ -4,9 +4,8 @@ const path = require("path");
 const readAndCleanStorage = () => {
 	const localPath = path.resolve(__dirname, `./lists.json`);
 	const backupPath = path.resolve(__dirname, `./backup.json`);
-	const testPath = localPath.replace("/db", "");
-	console.log("localPath", localPath, "testPath", testPath);
-	fs.readFile(testPath, "utf8", (error, file) => {
+	// const testPath = localPath.replace("/db", "");
+	fs.readFile(localPath, "utf8", (error, file) => {
 		if (error) {
 			console.log(error);
 			return;
@@ -19,7 +18,7 @@ const readAndCleanStorage = () => {
 						({ unseen, timestamp }) =>
 							new Date().getUTCDate() -
 								new Date(timestamp).getUTCDate() <
-								2 || unseen !== 0
+								8 || unseen !== 0
 					);
 					filtered[key] = test;
 				}

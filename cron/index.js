@@ -1,6 +1,8 @@
 const cron = require("node-cron");
+const shelljs = require("shelljs");
 const browser = require("../browser");
 const { readAndCleanStorage } = require("../db");
+
 const enable = () => {
 	const interval = 1;
 	const smallInterval = 30;
@@ -9,15 +11,16 @@ const enable = () => {
 	const parser = cron.schedule(`*/${smallInterval} * * * * *`, () => {
 		console.log(`running a task every ${smallInterval} seconds ${when()}`);
 		browser.enableParser();
-		console.log(browser.getCurrentParseCounter());
 	});
 	const cleanerHour = 22;
-	cron.schedule(`26 ${cleanerHour} * * *`, () => {
+	cron.schedule(`01 ${cleanerHour} * * *`, () => {
+		const nextCounter = browser.getCurrentParseCounter();
 		parser.stop();
-		console.log("stop");
+		readAndCleanStorage();
 		setTimeout(() => {
-			parser.start();
-			console.log("timeout");
+			shelljs.exec(
+				`COUNTER=${nextCounter} pm2 restart server --update-env`
+			);
 		}, 60000);
 	});
 };

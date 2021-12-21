@@ -91,7 +91,8 @@ const getUrls = async (func, title) => {
 	}
 };
 
-let parserCounter = 0;
+let parserCounter = parseInt(process.env.COUNTER) || 0;
+
 const getCurrentParseCounter = () => parserCounter;
 const enableParser = () => {
 	try {
@@ -99,6 +100,7 @@ const enableParser = () => {
 			parserCounter >= parseConfigs.length ? 0 : parserCounter;
 		const { url, config, title } = parseConfigs[parserCounter];
 		parserCounter += 1;
+
 		if (!title.includes("domria")) {
 			const browserInstance = browserObject.startBrowser();
 			parseUrls(url, config, title, browserInstance);
