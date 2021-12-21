@@ -51,11 +51,6 @@ const matcher = async (type, result) => {
 			  })
 			: [];
 		if (newAnn?.length) {
-			// const filteredStored = stored.filter(
-			// 	({ unseen, timestamp }) =>
-			// 		new Date().getUTCDate() - new Date(timestamp).getUTCDate() <
-			// 			3 || unseen !== 0
-			// );
 			const mustBeStored = [...newAnn, ...stored];
 			await writeToLists(type, mustBeStored);
 			if (newAnn.length > 1) {
@@ -113,13 +108,16 @@ const getUrls = async (func, title) => {
 	}
 };
 
-let parserCounter = 0;
+let parserCounter = parseInt(process.env.COUNTER) || 0;
+
+const getCurrentParseCounter = () => parserCounter;
 const enableParser = () => {
 	try {
 		parserCounter =
 			parserCounter >= parseConfigs.length ? 0 : parserCounter;
 		const { url, config, title } = parseConfigs[parserCounter];
 		parserCounter += 1;
+
 		if (!title.includes("domria")) {
 			const browserInstance = browserObject.startBrowser();
 			parseUrls(url, config, title, browserInstance);
@@ -135,4 +133,5 @@ const enableParser = () => {
 
 module.exports = {
 	enableParser,
+	getCurrentParseCounter,
 };
