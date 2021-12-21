@@ -11,7 +11,10 @@
     "get-lists": "scp kirov@35.233.157.22:/home/realtyparserapp/Parser-server/db/lists.json /Users/paulkirov/Documents/Parser-server",
     "copy-temp": "cp -i /home/kirov/temp/lists.json /home/realtyparserapp/Parser-server/db",
     "dev": "NODE_ENV=development npm run prod",
-    "prod": "pm2 start server.js && pm2 logs server --lines 1000"
+    "prod": "pm2 start server.js && pm2 logs server --lines 1000",
+    "b-lists": "js-beautify db/lists.json -r",
+    "b-backup": "js-beautify db/backup.json -r",
+    "cleanNStore": "node -e 'require(\"./db\").readAndCleanStorage()' && npm run b-lists && npm run b-backup"
   },
   "author": "Paul Kirov",
   "license": "ISC",
