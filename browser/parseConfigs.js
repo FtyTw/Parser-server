@@ -16,20 +16,19 @@ const besplatka_config = {
 const olx_places = [
 	//
 	"odessa",
-	"kryzhanovka_43791",
-	"leski_43795",
-	"fontanka",
-	"shevchenko_44347",
-	"vapnyarka_43741",
-	"gvardeyskoe_43751",
-	"korsuntsy",
-	"krasnoselka_43787",
-	"novaya-dofinovka",
-	"aleksandrovka_43819",
-	"pervomayskoe_43827",
-	"sverdlovo_43841",
+	"kryzhanovka_43791", //дома, квартиры, комнаты
+	"leski_43795", //дома, квартиры, комнаты
+	"fontanka", //дома, квартиры, комнаты
+	"shevchenko_44347", //
+	"vapnyarka_43741", //дома,
+	"gvardeyskoe_43751", //дома
+	"korsuntsy", //проверить корсунцы, оставить только дома
+	"krasnoselka_43787", //дома, проверить
+	"novaya-dofinovka", //только дома
+	"aleksandrovka_43819", //квартиры, дома
+	"pervomayskoe_43827", //дома
+	"sverdlovo_43841", //дома
 ];
-
 const olxUrl = (place, type) =>
 	encodeURI(
 		`https://www.olx.ua/nedvizhimost/${type}/${place}/?search[private_business]=private&search[order]=created_at%3Adesc${

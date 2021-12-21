@@ -40,12 +40,14 @@ const out_of_city_districts = {
 	kryzhanivka: 8851,
 	liski: 8853,
 	novaya_dofinivka: 8855,
-	aleksandrovka: 8833,
+	aleksandrovka: 8833, //проверить александровку
 	pervomaiskoe: 8860,
 	sverdlovo: 8862,
 	svitle: 16037,
 	fontanka: 8866,
 };
+
+// квартиры в коминтерново проверить, по-необходимости убрать
 const city_district_ids = Object.values(districts);
 const out_of_city_district_ids = Object.values(out_of_city_districts);
 const search = {
