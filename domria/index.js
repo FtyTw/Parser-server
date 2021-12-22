@@ -92,6 +92,7 @@ const getAnnDataById = async (items) => {
 					description_uk,
 					beautiful_url,
 					street_name,
+					realty_id,
 				},
 			}) => {
 				const desc =
@@ -103,6 +104,7 @@ const getAnnDataById = async (items) => {
 				return {
 					title: desc.slice(0, 80),
 					uri: `${path_domria}${beautiful_url}`,
+					realty_id,
 				};
 			}
 		);
