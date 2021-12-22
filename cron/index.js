@@ -16,7 +16,7 @@ const enable = () => {
 	cron.schedule(`01 ${cleanerHour} * * *`, () => {
 		const nextCounter = browser.getCurrentParseCounter();
 		parser.stop();
-		readAndCleanStorage();
+		// readAndCleanStorage();
 		setTimeout(() => {
 			shelljs.exec(
 				`COUNTER=${nextCounter} pm2 restart server --update-env`
