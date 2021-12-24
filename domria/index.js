@@ -46,6 +46,7 @@ const out_of_city_districts = {
 	svitle: 16037,
 	fontanka: 8866,
 };
+
 const city_district_ids = Object.values(districts);
 const out_of_city_district_ids = Object.values(out_of_city_districts);
 const search = {

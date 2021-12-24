@@ -36,7 +36,7 @@ morgan.token("current_user", (req) => (req.user ? req.user.name : "anonymous"));
 
 /* Setup security middlewares
  * -------------------------- */
-app.use(helmet.hsts({ maxAge: 10886400000, includeSubdomains: true }));
+app.use(helmet.hsts({ maxAge: 10886400000, includeSubDomains: true }));
 app.use(cors({ origin: "*" }));
 
 /* Setup DB connection
