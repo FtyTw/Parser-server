@@ -72,9 +72,35 @@ const besplatkaConfigs = Types.map(({ type, title }) => {
 	};
 });
 
+const olx_exceptions = [
+	//
+	"olx_korsuntsy_flats",
+	"olx_korsuntsy_appartaments",
+	"olx_vapnyarka_flats",
+	"olx_vapnyarka_appartaments",
+	"olx_gvardeyskoe_flats",
+	"olx_gvardeyskoe_appartaments",
+	"olx_krasnoselka_flats",
+	"olx_krasnoselka_appartaments",
+	"olx_novaya-dofinovka_flats",
+	"olx_novaya-dofinovka_appartaments",
+	"olx_aleksandrovka_flats",
+	"olx_pervomayskoe_appartaments",
+	"olx_pervomayskoe_flats",
+	"olx_sverdlovo_flats",
+	"olx_sverdlovo_appartaments",
+];
+
+//TODO discuss possible useless categories
+// 'olx_shevchenko_appartaments',
+//  'olx_shevchenko_houses',
+//  'olx_shevchenko_flats',
+//  'olx_aleksandrovka_appartaments',
+//  'domria_kominternovo_flats'
+
 const parseConfigs = [
 	//
-	...olxConfigs,
+	...olxConfigs.filter(({ title }) => !olx_exceptions.includes(title)),
 	...domriaConfigs,
 	...besplatkaConfigs,
 ];
