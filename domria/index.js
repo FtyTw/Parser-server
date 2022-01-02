@@ -1,6 +1,7 @@
 const axios = require("axios");
 const path_domria = "https://dom.ria.com/uk/";
 const YOUR_API_KEY = "vI0R8HtF1c7HwZGdV8WXitsr0scCJBIz9oolk2La";
+const { writeToIds, readIds } = require("../db");
 const instance = axios.create({
 	baseURL: `https://developers.ria.com/dom/search`,
 	params: {
@@ -81,11 +82,8 @@ const getAnnDataByIdPromises = (id) =>
 
 const getAnnDataById = async (items) => {
 	try {
-		const ids = items.slice(0, 15);
-
-		const promises = ids.map(getAnnDataByIdPromises);
+		const promises = items.map(getAnnDataByIdPromises);
 		const result_data = await Promise.all(promises);
-
 		const prettified_data = result_data.map(
 			({
 				data: {
@@ -126,7 +124,15 @@ const handleParamsRequest = async (type, place) => {
 			data: { items },
 		} = result;
 		console.log(`Domria:Got an items of ${type} from the ${place}`);
-		return !items.length ? items : getAnnDataById(items);
+		const category = `${place}_${type}`;
+
+		const storedIds = (await readIds(category)) || [];
+		const newIds = items.filter((id) => !storedIds.includes(id));
+		const sum = [...storedIds, ...newIds];
+		console.log("Got some new items ", newIds.length);
+		await writeToIds(category, sum);
+		return getAnnDataById(newIds);
+		// return !items.length ? items : getAnnDataById(items);
 	} catch (error) {
 		console.log("handleParamsRequest", error.message);
 	}

@@ -12,7 +12,7 @@ const {
 } = require("../db");
 
 const parseConfigs = require("./parseConfigs");
-
+const browserInstance = browserObject.startBrowser();
 const hugeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
 const notificationCurry = (type) => {
@@ -119,7 +119,6 @@ const enableParser = () => {
 		parserCounter += 1;
 
 		if (!title.includes("domria")) {
-			const browserInstance = browserObject.startBrowser();
 			parseUrls(url, config, title, browserInstance);
 		} else {
 			const type = hugeFirstLetter(url);

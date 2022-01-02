@@ -83,6 +83,7 @@ const writeToFile = (type, field, data = null) => {
 };
 
 const writeToLists = (field, data) => writeToFile("lists", field, data);
+const writeToIds = (field, data) => writeToFile("ids", field, data);
 
 const writeToAnnouncements = (field, data) =>
 	writeToFile("announcements", field, data);
@@ -149,6 +150,7 @@ const readFromFile = (type, field) => {
 
 const readAnnouncements = (field) => readFromFile("announcements", field);
 const readLists = (field) => readFromFile("lists", field);
+const readIds = (field) => readFromFile("ids", field);
 const readErrors = (field) => readFromFile("error");
 
 module.exports = {
@@ -159,6 +161,8 @@ module.exports = {
 	readAnnouncements,
 	readLists,
 	readErrors,
+	readIds,
 	getLists,
 	readAndCleanStorage,
+	writeToIds,
 };

@@ -12,17 +12,17 @@ const enable = () => {
 		console.log(`running a task every ${smallInterval} seconds ${when()}`);
 		browser.enableParser();
 	});
-	const cleanerHour = 22;
-	cron.schedule(`01 ${cleanerHour} * * *`, () => {
-		const nextCounter = browser.getCurrentParseCounter();
-		parser.stop();
-		// readAndCleanStorage();
-		setTimeout(() => {
-			shelljs.exec(
-				`COUNTER=${nextCounter} pm2 restart server --update-env`
-			);
-		}, 60000);
-	});
+	// const cleanerHour = 22;
+	// cron.schedule(`01 ${cleanerHour} * * *`, () => {
+	// 	const nextCounter = browser.getCurrentParseCounter();
+	// 	parser.stop();
+	// 	// readAndCleanStorage();
+	// 	setTimeout(() => {
+	// 		shelljs.exec(
+	// 			`COUNTER=${nextCounter} pm2 restart server --update-env`
+	// 		);
+	// 	}, 60000);
+	// });
 };
 
 module.exports = { enable };
