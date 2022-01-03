@@ -29,7 +29,7 @@ function ScraperObject(url, config) {
 						}
 					);
 					console.log("returned empty");
-					const isClosed = await closeBrowser(page, this.url);
+					const isClosed = await closeBrowser(browser, this.url);
 					return [];
 				} catch (error) {
 					const selector = "a";
@@ -44,11 +44,12 @@ function ScraperObject(url, config) {
 							return links;
 						}
 					);
-					const isClosed = await closeBrowser(page, this.url);
+					const isClosed = await closeBrowser(browser, this.url);
 
 					return urls;
 				}
 			} catch (error) {
+				const isClosed = await closeBrowser(browser, this.url);
 				console.log(
 					`Error during navigation to ${this.url}, the error is ${error}`
 				);

@@ -130,7 +130,9 @@ const handleParamsRequest = async (type, place) => {
 		const newIds = items.filter((id) => !storedIds.includes(id));
 		const sum = [...storedIds, ...newIds];
 		console.log("Got some new items ", newIds.length);
-		await writeToIds(category, sum);
+		if (newIds?.length) {
+			await writeToIds(category, sum);
+		}
 		return getAnnDataById(newIds);
 		// return !items.length ? items : getAnnDataById(items);
 	} catch (error) {

@@ -5,10 +5,10 @@ const { readAndCleanStorage } = require("../db");
 
 const enable = () => {
 	const interval = 1;
-	const smallInterval = 30;
+	const smallInterval = 60;
 	const when = () => new Date().toLocaleString("uk-UA");
 	console.log(`cron enabled at ${when()}`);
-	const parser = cron.schedule(`*/${smallInterval} * * * * *`, () => {
+	const parser = cron.schedule("* * * * *", () => {
 		console.log(`running a task every ${smallInterval} seconds ${when()}`);
 		browser.enableParser();
 	});
