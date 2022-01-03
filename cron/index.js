@@ -12,17 +12,23 @@ const enable = () => {
 		console.log(`running a task every ${smallInterval} seconds ${when()}`);
 		browser.enableParser();
 	});
-	// const cleanerHour = 22;
-	// cron.schedule(`01 ${cleanerHour} * * *`, () => {
-	// 	const nextCounter = browser.getCurrentParseCounter();
-	// 	parser.stop();
-	// 	// readAndCleanStorage();
-	// 	setTimeout(() => {
-	// 		shelljs.exec(
-	// 			`COUNTER=${nextCounter} pm2 restart server --update-env`
-	// 		);
-	// 	}, 60000);
-	// });
+
+	cron.schedule(`0 */59 * * * *`, () => {
+		const nextCounter = browser.getCurrentParseCounter();
+		parser.stop();
+		// readAndCleanStorage();
+		console.log("killing all chromes");
+		shelljs.exec(`pkill -9 chrome`);
+		setTimeout(() => {
+			console.log(
+				"restarting the process with next counter:",
+				nextCounter
+			);
+			shelljs.exec(
+				`COUNTER=${nextCounter} pm2 restart server --update-env`
+			);
+		}, 30000);
+	});
 };
 
 module.exports = { enable };
