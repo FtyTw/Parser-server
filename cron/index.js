@@ -13,12 +13,16 @@ const enable = () => {
 		browser.enableParser();
 	});
 
-	cron.schedule(`0 */59 * * * *`, () => {
+	cron.schedule(`59 * * * *`, () => {
 		const nextCounter = browser.getCurrentParseCounter();
 		parser.stop();
 		// readAndCleanStorage();
-		console.log("killing all chromes");
-		shelljs.exec(`pkill -9 chrome`);
+
+		setTimeout(() => {
+			console.log("killing all chromes");
+			shelljs.exec(`pkill -9 chrome`);
+		}, 30000);
+
 		setTimeout(() => {
 			console.log(
 				"restarting the process with next counter:",
@@ -27,7 +31,7 @@ const enable = () => {
 			shelljs.exec(
 				`COUNTER=${nextCounter} pm2 restart server --update-env`
 			);
-		}, 30000);
+		}, 60000);
 	});
 };
 

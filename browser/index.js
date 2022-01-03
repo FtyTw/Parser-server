@@ -3,7 +3,27 @@ const scraperController = require("./pageController");
 const { sendNotification, sendMultipleNotifications } = require("../onesignal");
 const domRiaHandlers = require("../domria");
 const { ErrorLog, InfoLog } = require("../logs");
+// const axios = require('axios')
+// const cheerio = require('cheerio')
 
+// const url = 'https://www.olx.ua/nedvizhimost/doma/prodazha-domov/sverdlovo_43841/?search%5Bprivate_business%5D=private&search%5Border%5D=created_at%253Adesc&currency=USD'
+
+// axios.get(url).then(response=>{
+//     const $ = cheerio.load(response.data)
+//     const result = []
+
+//     if($('.marginright5.link.linkWithHash.detailsLink').length){
+//     $('.marginright5.link.linkWithHash.detailsLink').each((i,element)=>{
+//         result.push({
+//             title:$(element).text(),
+//             url:element.attribs.href
+//         })
+//     })
+//     console.log(result)
+// }
+// },error=>{
+
+// })
 const {
 	writeToLists,
 	writeToAnnouncements,
