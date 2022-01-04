@@ -139,7 +139,7 @@ const enableParser = () => {
 		parserCounter += 1;
 
 		if (!title.includes("domria")) {
-			const browserInstance = browserObject.startBrowser();
+			const browserInstance = browserObject.startBrowser(parserCounter);
 			parseUrls(url, config, title, browserInstance);
 		} else {
 			const type = hugeFirstLetter(url);

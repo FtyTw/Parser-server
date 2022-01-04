@@ -1,8 +1,10 @@
+const shelljs = require("shelljs");
+
 const closeBrowser = async (browser, url) => {
 	try {
 		const isClosed = await browser.close();
-
 		console.log(`Browser was closed, after visiting ${url}`);
+		shelljs.exec(`pkill -9 chrome`);
 
 		return isClosed;
 	} catch (error) {
@@ -50,6 +52,7 @@ function ScraperObject(url, config) {
 				}
 			} catch (error) {
 				const isClosed = await closeBrowser(browser, this.url);
+
 				console.log(
 					`Error during navigation to ${this.url}, the error is ${error}`
 				);
