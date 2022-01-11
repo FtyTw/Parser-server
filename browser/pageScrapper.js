@@ -5,7 +5,7 @@ const closeBrowser = async (browser, url) => {
 		const isClosed = await browser.close();
 		console.log(`Browser was closed, after visiting ${url}`);
 		shelljs.exec(`pkill -9 chrome`);
-
+		shelljs.exec('rm -rf /tmp/snap.chromium/tmp/*')
 		return isClosed;
 	} catch (error) {
 		console.log(`Error on browser closing: ${error}`);

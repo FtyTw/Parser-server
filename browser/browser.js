@@ -6,7 +6,7 @@ async function startBrowser(parserCounter) {
         const browser = await puppeteer.launch({
             executablePath: "/usr/bin/chromium-browser",
             headless: true,
-            args: ["--disable-setuid-sandbox"],
+            args: ["--disable-setuid-sandbox","--disable-dev-shm-usage"],
             ignoreHTTPSErrors: true,
             timeout: 1000,
         });
