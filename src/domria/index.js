@@ -1,6 +1,10 @@
 const axios = require("axios");
+const {
+	constants: { domria_key: YOUR_API_KEY },
+} = require("../utils");
+
 const path_domria = "https://dom.ria.com/uk/";
-const YOUR_API_KEY = "vI0R8HtF1c7HwZGdV8WXitsr0scCJBIz9oolk2La";
+
 const { writeToIds, readIds } = require("../db");
 const instance = axios.create({
 	baseURL: `https://developers.ria.com/dom/search`,

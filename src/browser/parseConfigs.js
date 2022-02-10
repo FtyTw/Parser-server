@@ -89,12 +89,13 @@ const olx_exceptions = [
 	"olx_pervomayskoe_flats",
 	"olx_sverdlovo_flats",
 	"olx_sverdlovo_appartaments",
+	"olx_shevchenko_appartaments",
+	"olx_shevchenko_houses",
+	"olx_shevchenko_flats",
 ];
 
 //TODO discuss possible useless categories
-// 'olx_shevchenko_appartaments',
-//  'olx_shevchenko_houses',
-//  'olx_shevchenko_flats',
+
 //  'olx_aleksandrovka_appartaments',
 //  'domria_kominternovo_flats'
 

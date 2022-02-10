@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
 const shelljs = require("shelljs");
+const { ErrorLog } = require("../logs");
 
 async function startBrowser(parserCounter) {
     try {
@@ -17,13 +18,15 @@ async function startBrowser(parserCounter) {
         }
 
         const browser = await puppeteer.launch(configs);
+
         return browser;
     } catch (err) {
         shelljs.exec(`pkill -9 chrome`);
         shelljs.exec(
             `COUNTER=${parserCounter - 1} pm2 restart server --update-env`
         );
-        console.log("Could not create a browser instance => : ", err);
+        const fullError = "Could not create a browser instance => : " + err;
+        ErrorLog("startBrowser", fullError);
     }
 }
 

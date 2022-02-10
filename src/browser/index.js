@@ -2,7 +2,7 @@ const browserObject = require("./browser");
 const scraperController = require("./pageController");
 const { sendNotification, sendMultipleNotifications } = require("../onesignal");
 const domRiaHandlers = require("../domria");
-const { ErrorLog, InfoLog } = require("../logs");
+const { ErrorLog, InfoLog, WarningLog } = require("../logs");
 // const axios = require('axios')
 // const cheerio = require('cheerio')
 
@@ -73,22 +73,20 @@ const matcher = async (type, result) => {
 		if (newAnn?.length) {
 			const mustBeStored = [...newAnn, ...stored];
 			await writeToLists(type, mustBeStored);
+
 			if (newAnn.length > 1) {
 				sendMultipleNotifications(type, newAnn);
 			} else {
 				const [simpleType] = type.split("_");
 				const [{ uri, title }] = newAnn;
-				sendNotification(
-					{
-						uri,
-						title: `${simpleType}:${title}`,
-						category: type,
-					},
-					true
-				);
+				sendNotification({
+					uri,
+					title: `${simpleType}:${title}`,
+					category: type,
+				});
 			}
 		} else {
-			InfoLog("matcher", "nothing new was found");
+			WarningLog("matcher", "nothing new was found");
 		}
 	} catch (error) {
 		ErrorLog("matcher", error);
