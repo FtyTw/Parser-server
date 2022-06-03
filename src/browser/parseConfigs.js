@@ -31,9 +31,9 @@ const olx_places = [
 ];
 const olxUrl = (place, type) =>
 	encodeURI(
-		`https://www.olx.ua/nedvizhimost/${type}/${place}/?search[private_business]=private&search[order]=created_at%3Adesc${
+		`https://www.olx.ua/d/uk/nedvizhimost/${type}/${place}/?search[private_business]=private&search[order]=created_at:desc${
 			place.includes("odessa") ? "&search[district_id]=91" : ""
-		}&currency=USD`
+		}`
 	);
 
 const olxConfigs = olx_places
@@ -89,12 +89,13 @@ const olx_exceptions = [
 	"olx_pervomayskoe_flats",
 	"olx_sverdlovo_flats",
 	"olx_sverdlovo_appartaments",
+	"olx_shevchenko_appartaments",
+	"olx_shevchenko_houses",
+	"olx_shevchenko_flats",
 ];
 
 //TODO discuss possible useless categories
-// 'olx_shevchenko_appartaments',
-//  'olx_shevchenko_houses',
-//  'olx_shevchenko_flats',
+
 //  'olx_aleksandrovka_appartaments',
 //  'domria_kominternovo_flats'
 

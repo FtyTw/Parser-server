@@ -2,28 +2,18 @@ const browserObject = require("./browser");
 const scraperController = require("./pageController");
 const { sendNotification, sendMultipleNotifications } = require("../onesignal");
 const domRiaHandlers = require("../domria");
-const { ErrorLog, InfoLog } = require("../logs");
-// const axios = require('axios')
-// const cheerio = require('cheerio')
+const { ErrorLog, InfoLog, WarningLog } = require("../logs");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
-// const url = 'https://www.olx.ua/nedvizhimost/doma/prodazha-domov/sverdlovo_43841/?search%5Bprivate_business%5D=private&search%5Border%5D=created_at%253Adesc&currency=USD'
+const removeDuplicates = (array) =>
+	[...new Set(array.map(({ uri, title }) => `${uri}splitter${title}`))].map(
+		(str) => {
+			const [uri, title] = str.split("splitter");
+			return { uri, title };
+		}
+	);
 
-// axios.get(url).then(response=>{
-//     const $ = cheerio.load(response.data)
-//     const result = []
-
-//     if($('.marginright5.link.linkWithHash.detailsLink').length){
-//     $('.marginright5.link.linkWithHash.detailsLink').each((i,element)=>{
-//         result.push({
-//             title:$(element).text(),
-//             url:element.attribs.href
-//         })
-//     })
-//     console.log(result)
-// }
-// },error=>{
-
-// })
 const {
 	writeToLists,
 	writeToAnnouncements,
@@ -73,39 +63,52 @@ const matcher = async (type, result) => {
 		if (newAnn?.length) {
 			const mustBeStored = [...newAnn, ...stored];
 			await writeToLists(type, mustBeStored);
+
 			if (newAnn.length > 1) {
 				sendMultipleNotifications(type, newAnn);
 			} else {
 				const [simpleType] = type.split("_");
 				const [{ uri, title }] = newAnn;
-				sendNotification(
-					{
-						uri,
-						title: `${simpleType}:${title}`,
-						category: type,
-					},
-					true
-				);
+				sendNotification({
+					uri,
+					title: `${simpleType}:${title}`,
+					category: type,
+				});
 			}
 		} else {
-			InfoLog("matcher", "nothing new was found");
+			WarningLog("matcher", "nothing new was found");
 		}
 	} catch (error) {
 		ErrorLog("matcher", error);
 	}
 };
 
+const handleOlx = async (url, title) => {
+	try {
+		console.log("Performed request to: ", url);
+		const response = await axios.get(url);
+		const $ = cheerio.load(response.data);
+		const result = [];
+		if ($(".css-1bbgabe").length) {
+			$(".css-1bbgabe").each((i, element) => {
+				result.push({
+					title: $(element).text(),
+					uri: "https://www.olx.ua" + element.attribs.href,
+				});
+			});
+
+			const withoutDuplicates = removeDuplicates(result);
+			matcher(title, withoutDuplicates);
+		}
+	} catch (error) {
+		console.log("handleOlx error during navigation to: " + url, error);
+	}
+};
+
 const parseUrls = async (url, config, title, browserInstance) => {
 	try {
 		const result = await scraperController(browserInstance, url, config);
-		const withoutDuplicates = [
-			...new Set(
-				result.map(({ uri, title }) => `${uri}splitter${title}`)
-			),
-		].map((str) => {
-			const [uri, title] = str.split("splitter");
-			return { uri, title };
-		});
+		const withoutDuplicates = removeDuplicates(result);
 
 		if (result?.length) {
 			matcher(title, withoutDuplicates);
@@ -138,9 +141,11 @@ const enableParser = () => {
 		const { url, config, title } = parseConfigs[parserCounter];
 		parserCounter += 1;
 
-		if (!title.includes("domria")) {
+		if (title.includes("domria")) {
 			const browserInstance = browserObject.startBrowser(parserCounter);
 			parseUrls(url, config, title, browserInstance);
+		} else if (title.includes("olx")) {
+			handleOlx(url, title);
 		} else {
 			const type = hugeFirstLetter(url);
 			const place = hugeFirstLetter(config);

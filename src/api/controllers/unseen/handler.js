@@ -1,4 +1,6 @@
 const { readLists, writeToLists } = require(`../../../db`);
+const { ErrorLog } = require(`../../../logs`);
+
 const unseen = async (req, res) => {
 	try {
 		const { category, uri } = req.body;
@@ -12,7 +14,7 @@ const unseen = async (req, res) => {
 		await writeToLists(category, catList);
 		res.apiResponse(JSON.stringify(catList));
 	} catch (error) {
-		console.log("ping", error);
+		ErrorLog("unseen", error);
 	}
 };
 

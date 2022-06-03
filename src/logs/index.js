@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 const types = {
 	error: "red",
-	info: "blue",
+	info: "cyan",
 	warning: "yellow",
 };
 
