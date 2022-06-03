@@ -14,7 +14,7 @@ async function startBrowser(parserCounter) {
     } catch (err) {
         shelljs.exec(`pkill -9 chrome`);
         shelljs.exec(
-            `COUNTER=${parserCounter} pm2 restart server --update-env`
+            `COUNTER=${parserCounter-1} pm2 restart server --update-env`
         );
         console.log("Could not create a browser instance => : ", err);
     }
