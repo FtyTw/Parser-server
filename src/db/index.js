@@ -37,6 +37,29 @@ const readAndCleanStorage = () => {
 	});
 };
 
+const clearUnseen = () => {
+	const localPath = createPath("lists");
+	const backupPath = createPath("backup");
+
+	fs.readFile(localPath, "utf8", (error, file) => {
+		if (error) {
+			ErrorLog("readAndCleanStorage", error);
+			return;
+		} else {
+			const list = JSON.parse(file);
+			const cleared = Object.keys(list).map((key) =>
+				list[key].map((item) => {
+					item.unseen = 0;
+					return item;
+				})
+			);
+			fs.writeFile(localPath, JSON.stringify(cleared), "utf8", () => {
+				InfoLog("clearUnseen", `stored to ${localPath}`);
+			});
+		}
+	});
+};
+
 const createDefaultFile = (path, callback, field, data = null) => {
 	try {
 		const defaultFile = {};
