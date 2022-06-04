@@ -83,21 +83,24 @@ const matcher = async (type, result) => {
 	}
 };
 
-const handleOlx = async (url, title) => {
+const handleLink = async (url, title, selector) => {
 	try {
 		console.log("Performed request to: ", url);
 		const response = await axios.get(url);
 		const $ = cheerio.load(response.data);
 		const result = [];
-		if ($(".css-1bbgabe").length) {
-			$(".css-1bbgabe").each((i, element) => {
+		if ($(selector).length) {
+			$(selector).each((i, element) => {
 				result.push({
 					title: $(element).text(),
-					uri: "https://www.olx.ua" + element.attribs.href,
+					uri: title.includes("olx")
+						? "https://www.olx.ua"
+						: "https://besplatka.ua" + element.attribs.href,
 				});
 			});
 
 			const withoutDuplicates = removeDuplicates(result);
+
 			matcher(title, withoutDuplicates);
 		}
 	} catch (error) {
@@ -141,11 +144,12 @@ const enableParser = () => {
 		const { url, config, title } = parseConfigs[parserCounter];
 		parserCounter += 1;
 
-		if (title.includes("domria")) {
-			const browserInstance = browserObject.startBrowser(parserCounter);
-			parseUrls(url, config, title, browserInstance);
+		if (title.includes("besplatka")) {
+			handleLink(url, title, ".m-title");
+			/*const browserInstance = browserObject.startBrowser(parserCounter);
+			parseUrls(url, config, title, browserInstance);*/
 		} else if (title.includes("olx")) {
-			handleOlx(url, title);
+			handleLink(url, title, ".css-1bbgabe");
 		} else {
 			const type = hugeFirstLetter(url);
 			const place = hugeFirstLetter(config);
