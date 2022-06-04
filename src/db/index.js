@@ -47,12 +47,13 @@ const clearUnseen = () => {
 			return;
 		} else {
 			const list = JSON.parse(file);
-			const cleared = Object.keys(list).map((key) =>
-				list[key].map((item) => {
+			const cleared = {};
+			for (key in list) {
+				cleared[key] = list[key].map((item) => {
 					item.unseen = 0;
 					return item;
-				})
-			);
+				});
+			}
 			fs.writeFile(localPath, JSON.stringify(cleared), "utf8", () => {
 				InfoLog("clearUnseen", `stored to ${localPath}`);
 			});
