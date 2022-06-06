@@ -89,13 +89,14 @@ const handleLink = async (url, title, selector) => {
 		const response = await axios.get(url);
 		const $ = cheerio.load(response.data);
 		const result = [];
+		const mainUrl = title.includes("olx")
+			? "https://www.olx.ua"
+			: "https://besplatka.ua";
 		if ($(selector).length) {
 			$(selector).each((i, element) => {
 				result.push({
 					title: $(element).text(),
-					uri: title.includes("olx")
-						? "https://www.olx.ua"
-						: "https://besplatka.ua" + element.attribs.href,
+					uri: mainUrl + element.attribs.href,
 				});
 			});
 
