@@ -99,13 +99,24 @@ const handleLink = async (url, title, selector) => {
 					uri: mainUrl + element.attribs.href,
 				});
 			});
-
-			const withoutDuplicates = removeDuplicates(result);
-
-			matcher(title, withoutDuplicates);
+			const itemsBasedOnTitle = title.includes("olx")
+				? result.filter(({ uri }) => !uri.includes("extended"))
+				: result;
+			const withoutDuplicates = removeDuplicates(itemsBasedOnTitle);
+			if (withoutDuplicates.length) {
+				matcher(title, withoutDuplicates);
+			} else {
+				InfoLog(
+					"handleLink",
+					"there was no any results during link handling"
+				);
+			}
 		}
 	} catch (error) {
-		console.log("handleOlx error during navigation to: " + url, error);
+		ErrorLog(
+			"handleLink",
+			"handleOlx error during navigation to: " + url + ":" + error
+		);
 	}
 };
 

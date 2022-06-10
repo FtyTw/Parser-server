@@ -39,7 +39,7 @@ const sendNotification = async ({ uri, title, category }) => {
       Uri is ${uri}
     `);
   } catch (error) {
-    console.log("sendNotification", error);
+    console.log("sendNotification", error.message);
   }
 };
 
@@ -58,7 +58,7 @@ const sendMultipleNotifications = async (category, announcements) => {
       Multiple notifications was sent at ${when()}
     `);
   } catch (error) {
-    console.log("sendNotification", error);
+    console.log("sendNotification", error.message);
   }
 };
 
