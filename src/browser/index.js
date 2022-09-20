@@ -63,6 +63,7 @@ const matcher = async (type, result) => {
 		if (newAnn?.length) {
 			const mustBeStored = [...newAnn, ...stored];
 			await writeToLists(type, mustBeStored);
+			return
 
 			if (newAnn.length > 1) {
 				sendMultipleNotifications(type, newAnn);
@@ -83,11 +84,10 @@ const matcher = async (type, result) => {
 	}
 };
 
-const handleLink = async (url, title, selector) => {
+const handleLink = (response, title, selector) => {
 	try {
-		console.log("Performed request to: ", url);
-		const response = await axios.get(url);
-		const $ = cheerio.load(response.data);
+		console.log("Performed request to: ", title);
+		const $ = cheerio.load(response);
 		const result = [];
 		const mainUrl = title.includes("olx")
 			? "https://www.olx.ua"
@@ -103,6 +103,7 @@ const handleLink = async (url, title, selector) => {
 				? result.filter(({ uri }) => !uri.includes("extended"))
 				: result;
 			const withoutDuplicates = removeDuplicates(itemsBasedOnTitle);
+			return withoutDuplicates;
 			if (withoutDuplicates.length) {
 				matcher(title, withoutDuplicates);
 			} else {
@@ -115,7 +116,7 @@ const handleLink = async (url, title, selector) => {
 	} catch (error) {
 		ErrorLog(
 			"handleLink",
-			"handleOlx error during navigation to: " + url + ":" + error
+			"handleOlx error during navigation to: " + title + ":" + error
 		);
 	}
 };
@@ -151,22 +152,38 @@ let parserCounter = parseInt(process.env.COUNTER) || 0;
 const getCurrentParseCounter = () => parserCounter;
 const enableParser = () => {
 	try {
-		parserCounter =
-			parserCounter >= parseConfigs.length ? 0 : parserCounter;
-		const { url, config, title } = parseConfigs[parserCounter];
-		parserCounter += 1;
 
-		if (title.includes("besplatka")) {
-			handleLink(url, title, ".m-title");
-			/*const browserInstance = browserObject.startBrowser(parserCounter);
-			parseUrls(url, config, title, browserInstance);*/
-		} else if (title.includes("olx")) {
-			handleLink(url, title, ".css-1bbgabe");
-		} else {
-			const type = hugeFirstLetter(url);
-			const place = hugeFirstLetter(config);
-			getUrls(domRiaHandlers[`get${place}${type}`], title);
-		}
+		const newParseConfigs = parseConfigs.filter(({ title }) => !title.includes("domria"))
+		const promises = newParseConfigs.map(url =>(axios.get(url.url)))		
+		
+		const promiseAll = async (promises) =>{
+			try {
+				const promAll = await Promise.all(promises)
+				const result = newParseConfigs.map(({title, config}, index) =>({
+						promiseResult: promAll[index],
+						title: title,				
+						selector: config.mainSelector,
+					})		
+				)				
+				const hL = result.map(({promiseResult, title, selector}) => handleLink(promiseResult, title, selector))
+				console.log(hL)
+			} catch (error) {
+				ErrorLog("promiseAll", error);
+			}	
+		}		
+
+		promiseAll(promises)	
+	
+		// parserCounter =
+		// 	parserCounter >= parseConfigs.length ? 0 : parserCounter;
+		// 	const { url, config, title } = parseConfigs[parserCounter];
+		// 	parserCounter += 1;
+
+		// 	if (title.includes("besplatka")) {
+		// 		handleLink(url, title, ".m-title");			
+		// 	} else  (title.includes("olx")) {
+		// 		handleLink(url, title, ".css-1bbgabe");
+		// 	} 
 	} catch (error) {
 		ErrorLog("enableParser", error);
 	}
