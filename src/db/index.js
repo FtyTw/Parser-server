@@ -77,13 +77,22 @@ const createDefaultFile = (path, callback, field, data = null) => {
 	}
 };
 
+const write = (data) => {
+	const localPath = createPath("lists");
+	fs.writeFile(localPath, JSON.stringify(data), "utf8", () => {
+		InfoLog("write", `write to ${localPath}`);
+	});
+}
+
 const writeToFile = (type, field, data = null) => {
 	try {
 		const promise = new Promise((resolve) => {
 			const localPath = createPath(type);
 			fs.readFile(localPath, "utf8", (error, file) => {
 				let store;
-				if (error) {
+				try {
+					store = JSON.parse(file);
+				} catch (error) {
 					createDefaultFile(
 						localPath,
 						(defaultFile) => {
@@ -93,8 +102,6 @@ const writeToFile = (type, field, data = null) => {
 						field,
 						data
 					);
-				} else {
-					store = JSON.parse(file);
 				}
 				const updated = { ...store };
 				updated[field] = data;
@@ -124,14 +131,14 @@ const getLists = () => {
 		// path.resolve(__dirname, `./lists.json`);
 		return new Promise((resolve, reject) => {
 			fs.readFile(listsPath, "utf8", (error, file) => {
-				if (error) {
+				try {
+					const result = JSON.parse(file);
+					resolve(result);
+				} catch (error) {
 					createDefaultFile(listsPath, (defaultFile) => {
 						resolve(defaultFile);
 					});
 					return;
-				} else {
-					const result = JSON.parse(file);
-					resolve(result);
 				}
 			});
 		});
@@ -145,16 +152,7 @@ const readFromFile = (type, field) => {
 		const localPath = createPath(type);
 		const promise = new Promise((resolve, reject) => {
 			fs.readFile(localPath, "utf8", async (error, file) => {
-				if (error) {
-					createDefaultFile(
-						localPath,
-						(defaultFile) => {
-							resolve(defaultFile[field]);
-						},
-						field
-					);
-					return;
-				} else {
+				try {
 					const result = JSON.parse(file);
 
 					if (field in result) {
@@ -163,6 +161,15 @@ const readFromFile = (type, field) => {
 						await writeToFile(type, field);
 						resolve(null);
 					}
+				} catch (error) {
+					createDefaultFile(
+						localPath,
+						(defaultFile) => {
+							resolve(defaultFile[field]);
+						},
+						field
+					);
+					return;
 				}
 			});
 		});
@@ -191,4 +198,5 @@ module.exports = {
 	readAndCleanStorage,
 	writeToIds,
 	clearUnseen,
+	write
 };

@@ -14,6 +14,7 @@
     "dev": "NODE_ENV=development npm run prod",
     "prod": "pm2 start server.js && pm2 logs server --lines 1000",
     "b-lists": "js-beautify storage/lists.json -r",
+    "b-ids": "js-beautify storage/ids.json -r",
     "b-backup": "js-beautify storage/backup.json -r",
     "cleanNStore": "node -e 'require(\"./db\").readAndCleanStorage()' && npm run b-lists && npm run b-backup"
   },

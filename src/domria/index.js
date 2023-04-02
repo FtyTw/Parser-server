@@ -6,6 +6,7 @@ const {
 const path_domria = "https://dom.ria.com/uk/";
 
 const { writeToIds, readIds } = require("../db");
+
 const instance = axios.create({
 	baseURL: `https://developers.ria.com/dom/search`,
 	params: {
@@ -84,7 +85,7 @@ const getItems = async (params) => await instance({ params });
 const getAnnDataByIdPromises = (id) =>
 	axios(`https://developers.ria.com/dom/info/${id}?api_key=${YOUR_API_KEY}`);
 
-const getAnnDataById = async (items) => {
+const getAnnDataById = async (items, category) => {
 	try {
 		const promises = items.map(getAnnDataByIdPromises);
 		const result_data = await Promise.all(promises);
@@ -105,14 +106,16 @@ const getAnnDataById = async (items) => {
 					"Нет описания";
 
 				return {
-					title: desc.slice(0, 80),
-					uri: `${path_domria}${beautiful_url}`,
-					realty_id,
+						title: desc.slice(0, 80),
+						uri: `${path_domria}${beautiful_url}`,
+						realty_id,
 				};
 			}
 		);
 
-		return prettified_data;
+		return {
+			[`domria_${category}`] : prettified_data
+		};
 	} catch (error) {
 		console.log("getAnnDataById", error);
 	}
@@ -137,7 +140,7 @@ const handleParamsRequest = async (type, place) => {
 		if (newIds?.length) {
 			await writeToIds(category, sum);
 		}
-		return getAnnDataById(newIds);
+		return getAnnDataById(newIds, category) ;
 		// return !items.length ? items : getAnnDataById(items);
 	} catch (error) {
 		console.log("handleParamsRequest", error.message);
@@ -167,4 +170,5 @@ module.exports = {
 	getKominternovoAppartaments,
 	getKominternovoHouses,
 	getKominternovoFlats,
+	handleParamsRequest
 };

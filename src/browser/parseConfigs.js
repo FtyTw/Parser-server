@@ -4,12 +4,14 @@ const Types = [
 	{ type: "komnaty/prodazha-komnat", title: "flats" },
 ];
 const olx_config = {
-	mainSelector: ":not(.wrapper>.emptynew)+.wrapper>.content",
+	mainSelector: ".css-rc5s2u",
+	// mainSelector: ":not(.wrapper>.emptynew)+.wrapper>.content",
 	subSelector: ".title-cell",
 	emptySelector: ".emptynew",
 };
 const besplatka_config = {
-	mainSelector: ".messages-list",
+	mainSelector: ".m-title",
+	// mainSelector: ".messages-list",
 	subSelector: ".d-title",
 	emptySelector: ".no-data",
 };
@@ -102,8 +104,11 @@ const olx_exceptions = [
 const parseConfigs = [
 	//
 	...olxConfigs.filter(({ title }) => !olx_exceptions.includes(title)),
-	...domriaConfigs,
+	// ...domriaConfigs,
 	...besplatkaConfigs,
 ];
 
-module.exports = parseConfigs;
+module.exports = {
+	parseConfigs,
+	domriaConfigs
+};
